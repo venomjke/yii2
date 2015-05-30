@@ -1,16 +1,10 @@
 Active Record
 =============
 
-[Active Record](http://en.wikipedia.org/wiki/Active_record_pattern) provides an object-oriented interface
-for accessing and manipulating data stored in databases. An Active Record class is associated with a database table,
-an Active Record instance corresponds to a row of that table, and an *attribute* of an Active Record
-instance represents the value of a particular column in that row. Instead of writing raw SQL statements,
-you would access Active Record attributes and call Active Record methods to access and manipulate the data stored 
-in database tables.
+[Active Record](http://en.wikipedia.org/wiki/Active_record_pattern) предоставляет объектно-ориентированный интерфейс для доступа и манипулирования данными, хранящимися в базе данных. Класс Active Record ассоциирован с таблицой базы данных,
+Экземпляр Active Record соответствует строке в таблице, а *атрибут* экземпляра Active Recrod представляет значение отдельного столбца этой строки. Вместо того чтобы писать чистые SQL <выражения>, вы сможете получить доступ к атрибутам Active Record, и вызвать Active Record методы для доступа и манипулирования данными, хранящимися в таблицах базы данных.
 
-For example, assume `Customer` is an Active Record class which is associated with the `customer` table
-and `name` is a column of the `customer` table. You can write the following code to insert a new
-row into the `customer` table:
+К примеру, предположим, `Customer`, является Active Record классом, связанными с таблицей `customer`, а `name` является колонкой таблицы `customer`. Вы можете написать следующий код для добавления новой строки в таблицу `customer`:
 
 ```php
 $customer = new Customer();
@@ -18,8 +12,7 @@ $customer->name = 'Qiang';
 $customer->save();
 ```
 
-The above code is equivalent to using the following raw SQL statement for MySQL, which is less
-intuitive, more error prone, and may even have compatibility problems if you are using a different kind of database:
+Код выше эквивалентен использованию следующего SQL выражения для MySQL, который менее интуитивен, более подвержен ошибкам, и может даже иметь проблемы с совместимостью, если вы используете различные типа баз данных:
 
 ```php
 $db->createCommand('INSERT INTO `customer` (`name`) VALUES (:name)', [
