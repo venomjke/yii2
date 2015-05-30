@@ -20,28 +20,28 @@ $db->createCommand('INSERT INTO `customer` (`name`) VALUES (:name)', [
 ])->execute();
 ```
 
-Yii provides the Active Record support for the following relational databases:
+<Yii предоставляет поддержку Active Record для следующих реляционных баз данных:>
 
-* MySQL 4.1 or later: via [[yii\db\ActiveRecord]]
-* PostgreSQL 7.3 or later: via [[yii\db\ActiveRecord]]
-* SQLite 2 and 3: via [[yii\db\ActiveRecord]]
-* Microsoft SQL Server 2008 or later: via [[yii\db\ActiveRecord]]
-* Oracle: via [[yii\db\ActiveRecord]]
-* CUBRID 9.3 or later: via [[yii\db\ActiveRecord]] (Note that due to a [bug](http://jira.cubrid.org/browse/APIS-658) in
+* MySQL 4.1 или позднее: через [[yii\db\ActiveRecord]]
+* PostgreSQL 7.3 или позднее: через [[yii\db\ActiveRecord]]
+* SQLite 2 и 3: через [[yii\db\ActiveRecord]]
+* Microsoft SQL Server 2008 или позднее: через [[yii\db\ActiveRecord]]
+* Oracle: через [[yii\db\ActiveRecord]]
+* CUBRID 9.3 или позднее: через [[yii\db\ActiveRecord]] (Note that due to a [bug](http://jira.cubrid.org/browse/APIS-658) in
   the cubrid PDO extension, quoting of values will not work, so you need CUBRID 9.3 as the client as well as the server)
-* Sphinx: via [[yii\sphinx\ActiveRecord]], requires the `yii2-sphinx` extension
-* ElasticSearch: via [[yii\elasticsearch\ActiveRecord]], requires the `yii2-elasticsearch` extension
+* Sphinx: через [[yii\sphinx\ActiveRecord]], требуется расширения `yii2-sphinx` 
+* ElasticSearch: через [[yii\elasticsearch\ActiveRecord]], требуется расширение `yii2-elasticsearch` 
 
-Additionally, Yii also supports using Active Record with the following NoSQL databases:
+Дополнительно, Yii также поддерживает использование Active Record вместе со следующими NoSQL базами данных:
 
-* Redis 2.6.12 or later: via [[yii\redis\ActiveRecord]], requires the `yii2-redis` extension
-* MongoDB 1.3.0 or later: via [[yii\mongodb\ActiveRecord]], requires the `yii2-mongodb` extension
+* Redis 2.6.12 или позднее: через [[yii\redis\ActiveRecord]], требуется расширение `yii2-redis`
+* MongoDB 1.3.0 или позднее: через [[yii\mongodb\ActiveRecord]], требуется расширение `yii2-mongodb`
 
-In this tutorial, we will mainly describe the usage of Active Record for relational databases.
-However, most content described here are also applicable to Active Record for NoSQL databases.
+В этом обучающем пособии, мы будем главным образом описать использование Active Record для реляционных БД.
+Однако, большая часть описанного здесь, так же применима к Active Record для NoSQL БД.
 
 
-## Declaring Active Record Classes <span id="declaring-ar-classes"></span>
+## Объявление Active Record класса <span id="declaring-ar-classes"></span>
 
 To get started, declare an Active Record class by extending [[yii\db\ActiveRecord]]. Because each Active Record
 class is associated with a database table, in this class you should override the [[yii\db\ActiveRecord::tableName()|tableName()]]
