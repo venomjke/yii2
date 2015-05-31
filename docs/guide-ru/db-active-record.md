@@ -43,11 +43,9 @@ $db->createCommand('INSERT INTO `customer` (`name`) VALUES (:name)', [
 
 ## Объявление Active Record класса <span id="declaring-ar-classes"></span>
 
-To get started, declare an Active Record class by extending [[yii\db\ActiveRecord]]. Because each Active Record
-class is associated with a database table, in this class you should override the [[yii\db\ActiveRecord::tableName()|tableName()]]
-method to specify which table the class is associated with.
+Для начала объявим Active Record класс, наследующий [[yii\db\ActiveRecord]]. Так как каждый Active Record класс связан с таблицей базы данных, необходимо переопределить метод [[yii\db\ActiveRecord::tableName()|tableName()]], для определения таблицы, связанной с классом.
 
-In the following example, we declare an Active Record class named `Customer` for the `customer` database table.
+В следующем примере, мы объявим Active Record класс `Customer` для таблицы `customer`.
 
 ```php
 namespace app\models;
