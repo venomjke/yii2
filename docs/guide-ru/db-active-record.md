@@ -67,19 +67,15 @@ class Customer extends ActiveRecord
 }
 ```
 
-Active Record instances are considered as [models](structure-models.md). For this reason, we usually put Active Record
-classes under the `app\models` namespace (or other namespaces for keeping model classes). 
+Экземпляры Active Record рассматриваются как [модели](structure-models.md). По этой причине, Active Record классы обычно размещаются  в `app\models` пространстве имен (или любом другом пространстве имен для хранения классов моделей). 
 
-Because [[yii\db\ActiveRecord]] extends from [[yii\base\Model]], it inherits *all* [model](structure-models.md) features,
-such as attributes, validation rules, data serialization, etc.
+Так как [[yii\db\ActiveRecord]] наследуется от [[yii\base\Model]], то наследуются *все* возможности [модели](structure-models.md), такие как атрибуты, правила валидации, сериализация данных, и.т.д
 
 
-## Connecting to Databases <span id="db-connection"></span>
+## Соединение с базой данных <span id="db-connection"></span>
 
-By default, Active Record uses the `db` [application component](structure-application-components.md) 
-as the [[yii\db\Connection|DB connection]] to access and manipulate the database data. As explained in 
-[Database Access Objects](db-dao.md), you can configure the `db` component in the application configuration like shown
-below,
+По умолчанию, Active Record использует `db` [компонент приложения](structure-application-components.md) 
+как  [[yii\db\Connection|Соединение с БД]] для доступа и манипулирования данными базы данных. Как объяснялось в [Объекты доступа к данным](db-dao.md), вы можете сконфигурировать компонент `db` в конфигурации приложения как показано ниже,
 
 ```php
 return [
@@ -94,8 +90,7 @@ return [
 ];
 ```
 
-If you want to use a different database connection other than the `db` component, you should override 
-the [[yii\db\ActiveRecord::getDb()|getDb()]] method:
+Если вы хотите использовать другое соединение, отличное от компонента `db`, то вам необходимо переопределить метод [[yii\db\ActiveRecord::getDb()|getDb()]]
 
 ```php
 class Customer extends ActiveRecord
@@ -111,20 +106,18 @@ class Customer extends ActiveRecord
 ```
 
 
-## Querying Data <span id="querying-data"></span>
+## Запросы к данным <span id="querying-data"></span>
 
-After declaring an Active Record class, you can use it to query data from the corresponding database table.
-The process usually takes the following three steps:
+После объявления Active Record класса, вы можете использовать его для получения данных из соответствующей таблицы.
+Процесс обычно проходит три шага:
 
-1. Create a new query object by calling the [[yii\db\ActiveRecord::find()]] method;
-2. Build the query object by calling [query building methods](db-query-builder.md#building-queries);
-3. Call a [query method](db-query-builder.md#query-methods) to retrieve data in terms of Active Record instances.
+1. Создание нового объекта запроса, путем вызова метода [[yii\db\ActiveRecord::find()]].
+2. Построение объекта запроса, вызывая [методы построения запроса](db-query-builder.md#building-queries);
+3. Вызов [метода запроса](db-query-builder.md#query-methods) для получения данных в терминах экземпляра Active Record.
 
-As you can see, this is very similar to the procedure with [query builder](db-query-builder.md). The only difference
-is that instead of using the `new` operator to create a query object, you call [[yii\db\ActiveRecord::find()]]
-to return a new query object which is of class [[yii\db\ActiveQuery]].
+Как вы можете видеть, это очень похоже на процедуру [query builder](db-query-builder.md). Основное отличе в том, что вместо использования оператора `new` для создания объекта запроса, вы вызываете [[yii\db\ActiveRecord::find()]], для получения нового объекта запроса, являющегося классом [[yii\db\ActiveQuery]].
 
-Below are some examples showing how to use Active Query to query data:
+Ниже несколько примеров, показывающих как использовать Active Query, для получения данных:
 
 ```php
 // return a single customer whose ID is 123
@@ -153,11 +146,10 @@ $customers = Customer::find()
     ->all();
 ```
 
-In the above, `$customer` is a `Customer` object while `$customers` is an array of `Customer` objects. They are
-all populated with the data retrieved from the `customer` table.
+В примере выше, `$customer` является объектом `Customer`, тогда как `$customers` является массивом объектов `Customer`. Они собраны с использованием полученных данных из таблицы `customer`.
 
-> Info: Because [[yii\db\ActiveQuery]] extends from [[yii\db\Query]], you can use *all* query building methods and
-  query methods as described in the Section [Query Builder](db-query-builder.md).
+> Информация: Так как [[yii\db\ActiveQuery]] наследует [[yii\db\Query]], вы можете использовать *все* методы построителья запросов, и методы описанные в разделе [Построитель запросов](db-query-builder.md).
+
 
 Because it is a common task to query by primary key values or a set of column values, Yii provides two shortcut
 methods for this purpose:
