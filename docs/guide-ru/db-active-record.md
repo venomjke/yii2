@@ -151,21 +151,18 @@ $customers = Customer::find()
 > Информация: Так как [[yii\db\ActiveQuery]] наследует [[yii\db\Query]], вы можете использовать *все* методы построителья запросов, и методы описанные в разделе [Построитель запросов](db-query-builder.md).
 
 
-Because it is a common task to query by primary key values or a set of column values, Yii provides two shortcut
-methods for this purpose:
+Так как задача получения записи по первичному или нескольким полям базы данных является стандартной, то Yii предоставляет два сокращенным метода для ее решения.
 
-- [[yii\db\ActiveRecord::findOne()]]: returns a single Active Record instance populated with the first row of the query result.
-- [[yii\db\ActiveRecord::findAll()]]: returns an array of Active Record instances populated with *all* query result.
+- [[yii\db\ActiveRecord::findOne()]]: возвращает единственный экземпляр Active Record, состоящий из данных первой строки результата запроса.
+- [[yii\db\ActiveRecord::findAll()]]: возвращает массив экземпляров Active Record, собранный на основе *всех* результатов запроса.
 
-Both methods can take one of the following parameter formats:
+Формат передачи параметров следующий:
 
-- a scalar value: the value is treated as the desired primary key value to be looked for. Yii will determine 
-  automatically which column is the primary key column by reading database schema information.
-- an array of scalar values: the array is treated as the desired primary key values to be looked for.
-- an associative array: the keys are column names and the values are the corresponding desired column values to 
-  be looked for. Please refer to [Hash Format](db-query-builder.md#hash-format) for more details.
-  
-The following code shows how theses methods can be used:
+- скалярное значение: поиск по первичному ключу. Yii автоматически определит, какая колонка является первичным ключем, считав значение схемы базы данных.
+- массив скалярных значений: массив будет рассматриваться как список значений, сопоставляемых по первичному ключу.
+- ассоциативный массив: ключи массива - поля в таблице, а значения - критерий поиска по полям. Более подробно написано в разделе [Hash формат](db-query-builder.md#hash-format)
+
+В примере ниже показано, как эти методы могут быть использованы:
 
 ```php
 // returns a single customer whose ID is 123
@@ -190,12 +187,9 @@ $customers = Customer::findAll([
 ]);
 ```
 
-> Note: Neither [[yii\db\ActiveRecord::findOne()]] nor [[yii\db\ActiveQuery::one()]] will add `LIMIT 1` to 
-  the generated SQL statement. If your query may return many rows of data, you should call `limit(1)` explicitly
-  to improve the performance, e.g., `Customer::find()->limit(1)->one()`.
-
-Besides using query building methods, you can also write raw SQLs to query data and populate the results into
-Active Record objects. You can do so by calling the [[yii\db\ActiveRecord::findBySql()]] method:
+> Заметка: Ни [[yii\db\ActiveRecord::findOne()]] ни [[yii\db\ActiveQuery::one()]] не добавят  `LIMIT 1` к     генерируемому   SQL выражению. Если ваш запрос может вернуть много строк, то вы должны явно указать `limit(1)` для улучшения производительности, к примеру `Customer::find()->limit(1)->one()`.
+ 
+Кроме использования методов построителя запросов, можно писать чистые SQL запросы, собирая результаты в объекты Active Record. Для этого нужно использовать метод [[yii\db\ActiveRecord::findBySql()]]:
 
 ```php
 // returns all inactive customers
@@ -203,40 +197,28 @@ $sql = 'SELECT * FROM customer WHERE status=:status';
 $customers = Customer::findBySql($sql, [':status' => Customer::STATUS_INACTIVE])->all();
 ```
 
-Do not call extra query building methods after calling [[yii\db\ActiveRecord::findBySql()|findBySql()]] as they
-will be ignored.
+Не вызывайте дополнительно методы построителя запросов после вызова [[yii\db\ActiveRecord::findBySql()|findBySql()]] так как они будут проигнорированы.
 
+## Доступ к данным <span id="accessing-data"></span>
 
-## Accessing Data <span id="accessing-data"></span>
-
-As aforementioned, the data brought back from the database are populated into Active Record instances, and
-each row of the query result corresponds to a single Active Record instance. You can access the column values
-by accessing the attributes of the Active Record instances, for example,
+Как упоминалось выше, данные, полученные из базы, собираются в экземпляры Active Record, каждая строка результата запроса соответствует экземпляру Active Record. Получить доступ к значениям полей можно, путем обращения к соответствующим атрибутам экземпляра Active Record, к примеру:
 
 ```php
-// "id" and "email" are the names of columns in the "customer" table
+// "id" и "email" являются полями таблицы "customer"
 $customer = Customer::findOne(123);
 $id = $customer->id;
 $email = $customer->email;
 ```
 
-> Note: The Active Record attributes are named after the associated table columns in a case-sensitive manner.
-  Yii automatically defines an attribute in Active Record for every column of the associated table.
-  You should NOT redeclare any of the attributes. 
+> Заметка: Названия атрибутов Active Record соответствуют названиям колонок в таблице, регистр учитывается. Yii автоматически определит атрибуты Active Record для каждой колонки связанной таблицы. Не нужно переопределять никакие атрибуты.
 
-Because Active Record attributes are named after table columns, you may find you are writing PHP code like
-`$customer->first_name`, which uses underscores to separate words in attribute names if your table columns are
-named in this way. If you are concerned about code style consistency, you should rename your table columns accordingly
-(to use camelCase, for example.)
+Так как названия атрибутов Active Record соответствуют именам колонок таблицы, то на PHP это будет выглядеть так `$customer->first_name`, нижнее подчеркивание для разделения слов в именах атрибутов. Если вы сконцентрированы на целостности стиля кодирования, то необходимо переименовать имена колонок соответственно.
+(используюя camelCase, к примеру.)
 
 
-### Data Transformation <span id="data-transformation"></span>
+### Преобразование данных <span id="data-transformation"></span>
 
-It often happens that the data being entered and/or displayed are in a format which is different from the one used in
-storing the data in a database. For example, in the database you are storing customers' birthdays as UNIX timestamps
-(which is not a good design, though), while in most cases you would like to manipulate birthdays as strings in
-the format of `'YYYY/MM/DD'`. To achieve this goal, you can define *data transformation* methods in the `Customer`
-Active Record class like the following:
+Часто случается, что данные вводимые и/или отображаемые в одном формате, отличаются от того, в котором хранятся в базе данных. Например, в базе данных храниться дата рождения клиента как UNIX timestamps (что есть не очень хорошо, но допустим), тогда как во многих случаях вам бы хотелось манипулировать "датой рождения" как строкой в формате `'YYYY/MM/DD'`. Для достижения этой цели, вам необходимо определить методы *преобразования данных* в Active Record классе `Customer`, как в примере:
 
 ```php
 class Customer extends ActiveRecord
@@ -255,15 +237,11 @@ class Customer extends ActiveRecord
 }
 ```
 
-Now in your PHP code, instead of accessing `$customer->birthday`, you would access `$customer->birthdayText`, which
-will allow you to input and display customer birthdays in the format of `'YYYY/MM/DD'`.
+Теперь в вашем PHP коде, вместо доступа к `$customer->birthday`, необходимо обращаться к `$customer->birthdayText`, что позволит вам вводить и отображать дату рождения в формате `'YYYY/MM/DD'`.
 
-> Tip: The above example shows a generic way of transforming data in different formats. If you are working with
-> date values, you may use [DateValidator](tutorial-core-validators.md#date) and [[yii\jui\DatePicker|DatePicker]],
-> which is easier to use and more powerful.
+> Подсказка: В примере вышем показан общий способ преобразования данных в других форматах. Если вы работаете с временными значениями, вы можете использовать [DateValidator](tutorial-core-validators.md#date) и [[yii\jui\DatePicker|DatePicker]], которые проще в использовании и более мощные.
 
-
-### Retrieving Data in Arrays <span id="data-in-arrays"></span>
+### Получение данных в массивах <span id="data-in-arrays"></span>
 
 While retrieving data in terms of Active Record objects is convenient and flexible, it is not always desirable
 when you have to bring back a large amount of data due to the big memory footprint. In this case, you can retrieve
